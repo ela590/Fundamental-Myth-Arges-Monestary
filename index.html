@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Argeș Monastery — the ballad of Craftsman Manole, collected by Vasile Alecsandri.">
+  <title>Argeș Monastery | Craftsman Manole</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #263238;
+      --muted: #647277;
+      --paper: #fffaf0;
+      --surface: rgba(255, 255, 255, .86);
+      --accent: #9c3d2e;
+      --accent-dark: #702b23;
+      --line: #e6d9c4;
+      --shadow: 0 1.5rem 4rem rgba(56, 38, 21, .14);
+      --reading-size: 1.08rem;
+      --reading-leading: 1.85;
+      --measure: 48rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: radial-gradient(circle at 10% 0%, #f8e6c6, transparent 34rem),
+                  linear-gradient(135deg, #f3ead8, #e9dcc4);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    .shell { width: min(100% - 2rem, 76rem); margin: auto; }
+    header { padding: clamp(2.5rem, 8vw, 7rem) 0 2rem; }
+    .eyebrow {
+      margin: 0 0 .7rem;
+      color: var(--accent);
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 13ch; margin: 0; font-size: clamp(2.7rem, 8vw, 6.5rem); line-height: .96; letter-spacing: -.05em; }
+    .subtitle { max-width: 38rem; margin: 1.3rem 0 0; color: var(--muted); font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.55; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.75rem; font: .8rem system-ui, sans-serif; }
+    .toolbar a, .toolbar button { border: 1px solid var(--line); border-radius: 999px; padding: .7rem 1rem; color: var(--accent-dark); background: rgba(255,255,255,.62); text-decoration: none; cursor: pointer; }
+    .toolbar a:hover, .toolbar button:hover { background: white; }
+    #device { color: var(--muted); }
+    main { padding: 1rem 0 5rem; }
+    .card { max-width: var(--measure); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4.5rem); background: var(--surface); border: 1px solid rgba(255,255,255,.7); border-radius: 1.25rem; box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+    .loading { color: var(--muted); font-family: system-ui, sans-serif; }
+    #poem { font-size: var(--reading-size); line-height: var(--reading-leading); white-space: pre-line; overflow-wrap: anywhere; }
+    #poem::first-letter { color: var(--accent); font-size: 3.2em; float: left; line-height: .8; padding: .15rem .35rem 0 0; }
+    footer { padding: 0 0 2rem; color: var(--muted); font: .8rem/1.5 system-ui, sans-serif; text-align: center; }
+
+    /* Phone: shorter lines, larger tap targets and comfortable type. */
+    @media (max-width: 599px) {
+      :root { --reading-size: 1.12rem; --reading-leading: 1.78; }
+      .shell { width: min(100% - 1.25rem, 76rem); }
+      header { padding-top: 2.5rem; }
+      .card { border-radius: .8rem; padding: 1.15rem; }
+      #poem::first-letter { font-size: 2.7em; }
+    }
+
+    /* Tablet: use a wider reading column and slightly denser text. */
+    @media (min-width: 600px) and (max-width: 1023px) {
+      :root { --reading-size: 1.08rem; --measure: 54rem; }
+    }
+
+    /* Desktop: larger margins make the poem feel like a printed broadside. */
+    @media (min-width: 1024px) {
+      :root { --reading-size: 1.12rem; --reading-leading: 1.9; }
+      .card { padding-left: clamp(3rem, 10vw, 8rem); padding-right: clamp(3rem, 10vw, 8rem); }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root { color-scheme: dark; --ink: #f4ead8; --muted: #c1b6a4; --paper: #1b1814; --surface: rgba(37, 31, 25, .92); --line: #4a3e31; --accent: #e28a69; --accent-dark: #f0ad8e; --shadow: 0 1.5rem 4rem rgba(0,0,0,.3); }
+      body { background: radial-gradient(circle at 10% 0%, #493426, transparent 34rem), #1b1814; }
+      .toolbar a, .toolbar button { color: var(--accent-dark); background: rgba(255,255,255,.06); }
+    }
+    @media print {
+      body { background: white; }
+      header { padding: 1rem 0; }
+      .toolbar, footer { display: none; }
+      .card { padding: 0; border: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <p class="eyebrow">A Romanian folk ballad</p>
+      <h1>Argeș Monastery</h1>
+      <p class="subtitle">The Craftsman Manole · collected by Vasile Alecsandri</p>
+      <div class="toolbar" aria-label="Reading controls">
+        <a href="#poem">Begin reading ↓</a>
+        <button id="font-toggle" type="button">Increase text size</button>
+        <span id="device" role="status">Adapting your reading view…</span>
+      </div>
+    </header>
+    <main>
+      <article class="card">
+        <div id="poem" class="loading" aria-live="polite">Loading the ballad…</div>
+      </article>
+    </main>
+    <footer>Translated from Romanian to English · This page adapts its layout to your screen.</footer>
+  </div>
+  <script>
+    const poem = document.querySelector('#poem');
+    const device = document.querySelector('#device');
+    const source = 'Arges%20Monastery.html';
+
+    function deviceName() {
+      const width = window.innerWidth;
+      return width < 600 ? 'Phone reading view' : width < 1024 ? 'Tablet reading view' : 'Desktop reading view';
+    }
+    function updateDevice() { device.textContent = deviceName(); }
+    updateDevice();
+    window.addEventListener('resize', updateDevice, { passive: true });
+
+    document.querySelector('#font-toggle').addEventListener('click', (event) => {
+      const enlarged = document.documentElement.classList.toggle('large-type');
+      document.documentElement.style.setProperty('--reading-size', enlarged ? '1.28rem' : '');
+      event.currentTarget.textContent = enlarged ? 'Use standard text size' : 'Increase text size';
+    });
+
+    fetch(source)
+      .then(response => {
+        if (!response.ok) throw new Error('The original poem could not be loaded.');
+        return response.text();
+      })
+      .then(markup => {
+        // Convert the original HTML's line breaks before parsing so the poem keeps its verse form.
+        const withLineBreaks = markup.replace(/<br\s*\/?>/gi, '\n');
+        const documentFromSource = new DOMParser().parseFromString(withLineBreaks, 'text/html');
+        poem.textContent = documentFromSource.body.textContent.replace(/\n\s*\n\s*\n+/g, '\n\n').trim();
+        poem.classList.remove('loading');
+      })
+      .catch(error => {
+        poem.classList.remove('loading');
+        poem.textContent = error.message + ' Open the original text: ';
+        const link = document.createElement('a');
+        link.href = source;
+        link.textContent = 'Arges Monastery.html';
+        poem.append(link);
+      });
+  </script>
+</body>
+</html>
