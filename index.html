@@ -17,7 +17,7 @@
       --line: #e6d9c4;
       --shadow: 0 1.5rem 4rem rgba(56, 38, 21, .14);
       --reading-size: 1.08rem;
-      --reading-leading: 1.85;
+      --verse-leading: 1.45;
       --measure: 48rem;
     }
 
@@ -46,34 +46,36 @@
     .toolbar a:hover, .toolbar button:hover { background: white; }
     #device { color: var(--muted); }
     main { padding: 1rem 0 5rem; }
-    .card { max-width: var(--measure); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4.5rem); background: var(--surface); border: 1px solid rgba(255,255,255,.7); border-radius: 1.25rem; box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+    .card { max-width: var(--measure); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4.5rem); background: var(--surface); border: 1px solid rgba(255,255,255,.7); border-radius: 1.25rem; box-shadow: var(--shadow); }
     .loading { color: var(--muted); font-family: system-ui, sans-serif; }
-    #poem { font-size: var(--reading-size); line-height: var(--reading-leading); white-space: pre-line; overflow-wrap: anywhere; }
+    #poem {
+      font-size: var(--reading-size);
+      line-height: var(--verse-leading);
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
     #poem::first-letter { color: var(--accent); font-size: 3.2em; float: left; line-height: .8; padding: .15rem .35rem 0 0; }
     footer { padding: 0 0 2rem; color: var(--muted); font: .8rem/1.5 system-ui, sans-serif; text-align: center; }
 
-    /* Phone: shorter lines, larger tap targets and comfortable type. */
     @media (max-width: 599px) {
-      :root { --reading-size: 1.12rem; --reading-leading: 1.78; }
+      :root { --reading-size: 1.12rem; --verse-leading: 1.42; }
       .shell { width: min(100% - 1.25rem, 76rem); }
       header { padding-top: 2.5rem; }
       .card { border-radius: .8rem; padding: 1.15rem; }
       #poem::first-letter { font-size: 2.7em; }
     }
 
-    /* Tablet: use a wider reading column and slightly denser text. */
     @media (min-width: 600px) and (max-width: 1023px) {
       :root { --reading-size: 1.08rem; --measure: 54rem; }
     }
 
-    /* Desktop: larger margins make the poem feel like a printed broadside. */
     @media (min-width: 1024px) {
-      :root { --reading-size: 1.12rem; --reading-leading: 1.9; }
+      :root { --reading-size: 1.12rem; --verse-leading: 1.45; }
       .card { padding-left: clamp(3rem, 10vw, 8rem); padding-right: clamp(3rem, 10vw, 8rem); }
     }
 
     @media (prefers-color-scheme: dark) {
-      :root { color-scheme: dark; --ink: #f4ead8; --muted: #c1b6a4; --paper: #1b1814; --surface: rgba(37, 31, 25, .92); --line: #4a3e31; --accent: #e28a69; --accent-dark: #f0ad8e; --shadow: 0 1.5rem 4rem rgba(0,0,0,.3); }
+      :root { color-scheme: dark; --ink: #f4ead8; --muted: #c1b6a4; --paper: #1b1814; --surface: rgba(37, 31, 25, .92); --line: #4a3e31; --accent: #e28a69; --accent-dark: #f0ad8e; --shadow: 0 1.5rem 4rem rgba(0, 0, 0, .35); }
       body { background: radial-gradient(circle at 10% 0%, #493426, transparent 34rem), #1b1814; }
       .toolbar a, .toolbar button { color: var(--accent-dark); background: rgba(255,255,255,.06); }
     }
@@ -129,7 +131,6 @@
         return response.text();
       })
       .then(markup => {
-        // Convert the original HTML's line breaks before parsing so the poem keeps its verse form.
         const withLineBreaks = markup.replace(/<br\s*\/?>/gi, '\n');
         const documentFromSource = new DOMParser().parseFromString(withLineBreaks, 'text/html');
         poem.textContent = documentFromSource.body.textContent.replace(/\n\s*\n\s*\n+/g, '\n\n').trim();
@@ -146,3 +147,4 @@
   </script>
 </body>
 </html>
+
